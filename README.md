@@ -19,11 +19,11 @@ If you want to go somewhere regarding implementation, please skip this part.
 YOLOv3 is a light-weight but powerful one-stage object detector, which means it regresses the positions of objects and predict the probability of objects directly from the feature maps of CNN. Typical example of one-state detector will be YOLO and SSD series.On the contrary,  two stage detector like R-CNN, Fast R-CNN and Faster R-CNN may include
 Selective Search, Support Vector Machine (SVM) and Region Proposal Network (RPN) besides CNN. Two-stage detectors will be sightly more accurate but much slower.
  
-YOLOv3 consists of 2 parts: feature extractor and detector. Feature extractor is a Darknet-53 without its fully connected layer, which is originally designed for classification task on ImageNet dataset. 
+YOLOv3 consists of 2 parts: feature extractor and detector. Feature extractor is a Darknet-53 without its fully connected layer, which is originally designed for classification task on ImageNet dataset.   
 ![darknet](/fig/Darknet.png)  
 *Darknet-53 architecture(Source: YOLOv3: An Incremental Improvement https://arxiv.org/abs/1804.02767)*
 
-Detector uses multi-scale fused features to predict the position and the class of the corresponding object.
+Detector uses multi-scale fused features to predict the position and the class of the corresponding object.  
 ![yolov3](/fig/yolo.png)*(Source: https://towardsdatascience.com/yolo-v3-object-detection-53fb7d3bfe6b)*
 
 As you can see from the picture above, there are 3 prediction scales in total. For example, if the spatial resolution of an input image is 32N X 32N, the output of the first prediction convolution layer(strides32) will be N X N X (B X (C+5)). B indicates amount of anchors at this scale and C stands for probabilities of different classes. 5 represents 5 different regressions, the  horizontal offset t_x, the vertical offset t_y, resizing factor of the given anchor height t_hand width t_wand objectness score o (whether an object exists in this square of the checkerboard). The second prediction layer will output feature maps of 2N X 2N X (B X (C+5)). And the third prediction output will be much finer, which is 4N X 4N X (B X (C+5).
@@ -68,7 +68,7 @@ Model size | Average FPS
 608*608 | 13.9
 
 ### Example Video
-[![](http://img.youtube.com/vi/6mWNgng6CfY/0.jpg)](http://www.youtube.com/watch?v=6mWNgng6CfY "")
+[![](http://img.youtube.com/vi/6mWNgng6CfY/0.jpg)](http://www.youtube.com/watch?v=6mWNgng6CfY "")   
 https://www.youtube.com/watch?v=6mWNgng6CfY&t=3s
 ## Object detection - fine tuning on IDRiD
 ### Features
@@ -79,9 +79,11 @@ https://www.youtube.com/watch?v=6mWNgng6CfY&t=3s
 * Checkpoint autosave
 ### Usage
 #### Execution
-Please download the official pre-trained weights on COCO dataset and put the weights file under the root directory of this project.
+Please download the official pre-trained weights on COCO dataset and put the weights file under the root directory of this project.  
 https://pjreddie.com/media/files/yolov3.weights
 First, enter ```python3 k-means.py``` to generate new anchors on our IDRiD dataset. Copy the new anchors into ```trainer_main.py```. In the terminal, enter ```python3 trainer_main.py``` to begin fine tuning.
+##### Training using Provided Checkpoints
+Please download the checkpoint files from https://www.dropbox.com/s/nb8q5b8a8lkcor3/tf_ckpts.tgz?dl=0. Decompress the content into the folder ```tf_ckpt```, training will be restored automatically.
 #### Flags
 Except for part of the previous flags, there might be the following flags needing to be noticed.
 * lr: learning rate of the Adam optimizer, by default 10e-3 for fine tuning. If full transfer learning(including feature extractor) is needed, please further reduce the learning rate.
@@ -96,14 +98,14 @@ A CSV file to summarize all labels and positional information will be efficient 
 #### Pre-processing and TFRecord
 The original image size is 4288 X 2848. The images are cropped and padded to ratio 1:1. After that, they are all resized to 608 X 608 and written into TFRecord. In this way, data could be loaded efficiently.
 #### Clustering using K-Means++
-From the original papers of YOLOv3 and its predecessor YOLOv2, one of the trick to gain more performance on a specific dataset is to use a better set of anchors priors. Since our dataset is a customized dataset different from COCO. It might be beneficial to use the new priors. Here I use K-Means++ instead of K-Means to make clustering less sensitive to initialization. For practice, I don't use any existing algorithm but implement the algorithm by myself. I tried two different setups, one is to generate 9 different sizes of anchors, another is to generate 3 anchors. Results with non-changed COCO anchors will also be reported later.
+From the original papers of YOLOv3 and its predecessor YOLOv2, one of the trick to gain more performance on a specific dataset is to use a better set of anchors priors. Since our dataset is a customized dataset different from COCO. It might be beneficial to use the new priors. Here I use K-Means++ instead of K-Means to make clustering less sensitive to initialization. For practice, I don't use any existing package but implement the algorithm by myself. I tried two different setups, one is to generate 9 different sizes of anchors, another is to generate 3 anchors. Results with non-changed COCO anchors will also be reported later.
 Name | anchors
 ------------ | -------------
 COCO original | [(10, 13), (16, 30), (33, 23), (30, 61), (62, 45), (59, 119), (116, 90), (156, 198), (373, 326)]
 IDRiD-9 | [(77, 92), (89, 93), (83, 101), (95, 101), (93, 111), (105, 109), (101, 119), (114, 125), (151, 152)]
 IDRiD-3 | [(86, 98), (97, 108), (110, 120)]
 ##### Distance of K-Means Clusters
-Following YOLOv2:
+Following YOLOv2:  
 ![](/fig/IOU.png)
 ##### Flags
 * NUM_CLUSTER: how many clusters will be built.
@@ -116,8 +118,8 @@ Since our dataset is a rather small dataset, after train-validation-split, there
 * random contrast
 * random hue
 Further data augmentation methods could be considered: as flipping, shearing and shifting.
-##### Flags:
-
+##### Flags
+* probability: percentages of augmented images.
 #### Training and checkpoints
 Before training, all pre-trained weights except for those for the last 3 detection layers will be loaded. The weights of feature extractor will be frozen. I also tried unfreezing feature extractor to support full transfer learning. Unfortunately, my VRAM (6GB) is limited and unable to finish the training. During the training, checkpoints will be saved under the directory ```./tf_ckpt``` automatically every 5 epochs. If there is any valid checkpoint file in this folder, training will be restored.
 #### Training Monitor and Metrics
