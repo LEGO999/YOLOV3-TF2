@@ -67,7 +67,7 @@ Model size | Average FPS
 416*416 | 22.3
 608*608 | 13.9
 
-### Example Video
+### Demo Video
 [![](http://img.youtube.com/vi/6mWNgng6CfY/0.jpg)](http://www.youtube.com/watch?v=6mWNgng6CfY "")   
 https://www.youtube.com/watch?v=6mWNgng6CfY&t=3s
 ## Object detection - fine tuning on IDRiD
@@ -111,7 +111,7 @@ Following YOLOv2:
 ##### Flags
 * NUM_CLUSTER: how many clusters will be built.
 * NEW_CENTRIOD_THRESHOLD: K-Means is sensitive to initialization. Theoretically, it should be set as 1.0. In this situation, the furthest point will be chosen as the centriod of the new cluster at the initialization. Pro: larger coverage of data points;  con: sensitive to outliers. By default, threshold is set as 0.98.
-##### Example of K-Means++
+##### Demo of K-Means++
 ![](/fig/k-means.gif)
 #### Data augmentation
 Since our dataset is a rather small dataset, after train-validation-split, there are about 360 images for training, I use data augmentation to mitigate over-fitting. Data augmentation contains: 
