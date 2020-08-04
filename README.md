@@ -6,7 +6,7 @@ This is my implementation of YOLOv3 using TensorFlow 2.0 backend. The main purpo
 ![nerve](/fig/optics_nerve.png)
 *Fundus and the corresponding optic nerve*
 
-The following contents will be provided in this repo:
+The following content will be provided in this repo:
 * Introduction of YOLOv3
 * Object detection based on the official pre-trained weights
 * Object detection - fine tuning on IDRiD  
