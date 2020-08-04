@@ -48,8 +48,8 @@ In this part, object detection could be executed on videos or camera input.
  * Seaborn 0.10.0
 ### Usage
 #### Execution
-Please download the official pre-trained weights on COCO dataset and put the weights file under the root directory of this project.
-https://pjreddie.com/media/files/yolov3.weights
+Please download the official pre-trained weights on COCO dataset and put the weights file under the root directory of this project.  
+https://pjreddie.com/media/files/yolov3.weights  
 In the terminal, enter ```python3 video_detect.py``` to execute video object detection task using pre-trained weights.
 #### Flags
 * Video: If true, the specific video will be processed. Else, the corresponding camera will be called to record video.
@@ -117,7 +117,7 @@ Following YOLOv2:
 Since our dataset is a rather small dataset, after train-validation-split, there are about 360 images for training, I use data augmentation to mitigate over-fitting. Data augmentation contains: 
 * random brightness
 * random contrast
-* random hue
+* random hue  
 Further data augmentation methods could be considered: as flipping, shearing and shifting.
 ##### Flags
 * probability: percentages of augmented images.
