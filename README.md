@@ -28,8 +28,8 @@ Detector uses multi-scale fused features to predict the position and the class o
 
 As you can see from the picture above, there are 3 prediction scales in total. For example, if the spatial resolution of an input image is 32N X 32N, the output of the first prediction convolution layer(strides32) will be N X N X (B X (C+5)). B indicates amount of anchors at this scale and C stands for probabilities of different classes. 5 represents 5 different regressions, the  horizontal offset t_x, the vertical offset t_y, resizing factor of the given anchor height t_hand width t_wand objectness score o (whether an object exists in this square of the checkerboard). The second prediction layer will output feature maps of 2N X 2N X (B X (C+5)). And the third prediction output will be much finer, which is 4N X 4N X (B X (C+5).
 
-Summarizing YOLO, YOLOv2 and YOLOv3, I think the loss function of YOLOv3 could be formulated as follows:
-![](/fig/loss.PNG)
+Reading papers of YOLO, YOLOv2 and YOLOv3, I summarize the loss function of YOLOv3 as follows:  
+![](/fig/loss1.PNG)
 <!-- $$
 L_{Localization} = \lambda_1\sum_{i=0}^{N^2}\sum_{j=0}^{B}1_{ij}^{obj}[(t_{x} - t_{\hat{x}})^2 + (t_{y} - t_{\hat{y}})^2]
 \\L_{Shaping} =\lambda_2\sum_{i=0}^{N^2}\sum_{j=0}^{B}1_{ij}^{obj}[(t_{w} - t_{\hat{w}})^2 + (t_{h} - t_{\hat{h}})^2]\\
