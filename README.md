@@ -49,7 +49,7 @@ In this part, object detection could be executed on videos or camera input.
 ### Usage
 #### Execution
 Please download the official pre-trained weights on COCO dataset and put the weights file under the root directory of this project.  
-https://pjreddie.com/media/files/yolov3.weights  
+https://pjreddie.com/media/files/yolov3.weights   
 In the terminal, enter ```python3 video_detect.py``` to execute video object detection task using pre-trained weights.
 #### Flags
 * Video: If true, the specific video will be processed. Else, the corresponding camera will be called to record video.
@@ -124,7 +124,7 @@ Further data augmentation methods could be considered: as flipping, shearing and
 #### Training and checkpoints
 Before training, all pre-trained weights except for those for the last 3 detection layers will be loaded. The weights of feature extractor will be frozen. I also tried unfreezing feature extractor to support full transfer learning. Unfortunately, my VRAM (6GB) is limited and unable to finish the training. During the training, checkpoints will be saved under the directory ```./tf_ckpt``` automatically every 5 epochs. If there is any valid checkpoint file in this folder, training will be restored.
 #### Training Monitor and Metrics
-In order to monitor the training, TensorBoard is set up in the folder ```results```. To view the result, please enter```python3 tensorboard --logdir results``` under the corresponding project directory. Intersection over Union (IoU) and sum loss are the metrics to monitor the training.
+In order to monitor the training, TensorBoard is set up in the folder ```results```. To view the result, please enter```tensorboard --logdir results``` under the corresponding project directory. Intersection over Union (IoU) and sum loss are the metrics to monitor the training.
 
 ### Final results
 
